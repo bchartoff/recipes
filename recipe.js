@@ -84,7 +84,6 @@ d3.json("data/schema/" + getQueryString("recipe")).then(function(data){
 		.attr("class","tag")
 	tag.append("a")
 		.attr("href", function(d){ return "index.html?search=" + d })
-		.attr("target", "_blank")
 		.text(function(d){ return d })
 
 

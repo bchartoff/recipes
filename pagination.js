@@ -6,7 +6,8 @@ function getQueryString(name) {
 }
 
 $(document).ready(function(){
-
+  var initSearch = getQueryString("search")
+  var pageNum = getQueryString("page") == "" ? "1" : getQueryString("page")
   // initSliders();
 
   // //NOTE: To append in different container
@@ -43,7 +44,6 @@ $(document).ready(function(){
     // console.log(record)
     var colNum = ((recipeCount-1)%3) + 1
     recipeCount += 1
-    console.log(recipeCount)
     $(".column_" + String(colNum)).append(html_ele);
     // $(".column_1").append(html_ele);
     html_ele.addClass("trash")
@@ -61,6 +61,7 @@ $(document).ready(function(){
     pagination: {
       container: '#pagination',
       visiblePages: 5,
+      startPage: pageNum,
       perPage: {
         values: [20],
         container: '#per_page'
@@ -69,51 +70,21 @@ $(document).ready(function(){
     appendToContainer: appendFn
   });
 
-  // FJS.addCallback('beforeAddRecords', function(){
-  //   // if(this.recordsCount >= 48){
-  //     // this.stopStreaming();
-  //   // }
-  //   console.log(this.recordsCount)
-  // });
 
-  // FJS.addCallback('afterAddRecords', function(){
-  //   console.log(this.recordsCount)
-  //   var percent = (this.recordsCount - 363)*100/363;
-
-  //   $('#stream_progress').text(percent + '%').attr('style', 'width: '+ percent +'%;');
-
-  //   if (percent == 100){
-  //     $('#stream_progress').parent().fadeOut(1000);
-  //   }
-  // });
-
-  // FJS.setStreaming({
-  //   data_url: 'data/streaming_recipes.json',
-  //   stream_after: 1,
-  //   batch_size: 10
-  // });
-
-  // FJS.addCriteria({field: 'year', ele: '#year_filter', type: 'range', all: 'all'});
-  // FJS.addCriteria({field: 'rating', ele: '#rating_filter', type: 'range'});
-  // FJS.addCriteria({field: 'runtime', ele: '#runtime_filter', type: 'range'});
-  // FJS.addCriteria({field: 'genre', ele: '#genre_criteria input:checkbox'});
-
-  /*
-   * Add multiple criterial.
-    FJS.addCriteria([
-      {field: 'genre', ele: '#genre_criteria input:checkbox'},
-      {field: 'year', ele: '#year_filter', type: 'range'}
-    ])
-  */
-  var initSearch = getQueryString("search")
+  if(pageNum != 1){
+    var Paginator = FJS.paginator
+    Paginator.setCurrentPage(+pageNum)
+  }
   window.FJS = FJS;
   if(initSearch != ""){
     $("#searchbox").val(initSearch)
     FJS.filter()
   }
 
-});
+  // FJS.page = { currentPage: 12, perPage: 20 };
+  // FJS.renderPagination(40)
 
+});
 
 
 // function initSliders(){

@@ -882,7 +882,8 @@
     this.addRecords(records, this.opts['filter_on_init'] || false);
   
     if(this.has_pagination){
-      this.initPagination();
+      console.log(this.opts.pagination)
+      this.initPagination(this.opts.pagination.startPage);
     }
   };
   
@@ -1406,7 +1407,7 @@
     }
   }
   
-  F.initPagination = function(){
+  F.initPagination = function(startPage){
     var self = this,
     opts = this.opts.pagination;
   
@@ -1418,7 +1419,7 @@
       opts.perPage.values = [10, 20, 30];
     }
   
-    this.page = { currentPage: 1, perPage: opts.perPage.values };
+    this.page = { currentPage: +startPage, perPage: opts.perPage.values };
   
     this.paginator = new Paginator(this.lastResult().length, this.opts.pagination, function(currentPage, perPage){
       self.page = { currentPage: currentPage, perPage: perPage }
@@ -1501,6 +1502,7 @@
   };
   
   P.setCurrentPage = function(page){
+    console.log(page)
     page = this.toPage(page)
     this.prevCurrentPage = this.currentPage;
     this.currentPage = page;
@@ -1513,28 +1515,48 @@
   }
   
   P.toPage = function(page){
+
+    var newPage;
+
     if(page == 'first'){
-      return 1;
+      newPage = 1;
     }
   
-    if(page == 'last'){
-      return this.totalPages();
+    else if(page == 'last'){
+      newPage = this.totalPages();
     }
   
-    if(page == 'next'){
+    else if(page == 'next'){
       var next_page = this.currentPage + 1;
-      return (next_page > this.totalPages() ? this.currentPage : next_page);
+      newPage = (next_page > this.totalPages()) ? this.currentPage : next_page;
     }
   
-    if(page == 'prev'){
+    else if(page == 'prev'){
       var prev_page = this.currentPage - 1;
-      return (prev_page <= 0 ? this.currentPage : prev_page);
+      newPage = (prev_page <= 0) ? this.currentPage : prev_page;
+    }else{
+      newPage = parseInt(page)
     }
-    
-    return parseInt(page);
+    // page = this.currentPage
+
+    var pageUrl = window.location.href,
+        newUrl
+
+    if(pageUrl.search("page=") != -1){
+      newUrl = pageUrl.replace(/page\=\d/g,"page=" + parseInt(newPage))
+    }
+    else if(pageUrl.search(/\?/) != -1){
+      newUrl = pageUrl + "&page=" + parseInt(newPage)
+    }else{
+      newUrl = pageUrl + "?page=" + parseInt(newPage)
+    }
+    window.history.pushState(false, false, newUrl)
+
+    return newPage;
   };
   
   P.paginate = function(page){
+
     this.render();
     this.onPagination(this.currentPage, this.perPageCount);
   };
