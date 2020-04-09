@@ -53,6 +53,7 @@ for file_name in files:
 		data = json.load(json_file)
 
 		rating = "" if data["aggregateRating"] == None else float(data["aggregateRating"]["ratingValue"])
+
 		duration = "" if "totalTime" not in data else isoDurationToString(data["totalTime"])
 		# print(rating)
 		recipe = {"json": file_name.replace(path_to_json,""),"name":data["name"], "description": data["description"], "author": data["author"]["name"], "image": data["image"], "duration": duration, "servings": data["recipeYield"], "cuisine": data["recipeCuisine"], "categories": data["recipeCategory"].split(", "), "keywords": data["keywords"], "rating": rating }

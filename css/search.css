@@ -67,13 +67,16 @@ select:focus, textarea:focus, input:focus{
   border-radius: 0;
 }
 
-
+.fjs_item:hover .author, .fjs_item:hover .duration, .fjs_item:hover .servings{
+  font-weight: bold;
+}
 .card h4{
   color: #353535;
   font-weight: 900;
 }
 .cardFooter{
   margin-top: 20px;
+  color: #353535;
 }
 .author{
   font-size: 14px;

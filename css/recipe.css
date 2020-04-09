@@ -2,6 +2,9 @@ body{
 	font-family: "Roboto", sans-serif;
 	color: #353535;
 }
+a{
+	color: #1696d2;
+}
 #recipeContainer{
 	max-width: 960px;
     margin: 0 auto;
@@ -16,6 +19,15 @@ body{
 	font-size: 15px;
     margin-bottom: 20px;
 }
+#recipeAuthor a{
+    text-decoration: none;
+    color: #353535;
+}
+#recipeAuthor a:hover{
+    text-decoration: underline;
+    font-weight: bold;
+}
+
 #headerContainer{
 	padding-bottom: 0px;
     border-bottom: 1px solid #353535
@@ -37,6 +49,35 @@ body{
     float: left;
     font-size: 14px;
 }
+#ratingCount{
+    display: inline-block;
+    float: right;
+    font-size: 14px;
+    margin-right: 104px;
+    position: relative;
+    top: 2px;
+    font-style: italic;
+}
+#summaryRating{
+    display: inline-block;
+    width: 100px;
+    float: right;
+    position: relative;
+}
+#summaryRating span{
+    width: calc(100% - 4px);
+    left: 57px;
+    border-bottom: 17px solid #fdbf11;
+    position: absolute;
+    top: 1px;
+    left: 2px;
+}
+#summaryRating img{
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
 
 .smallLabel{
     font-family: "Roboto Slab";
@@ -55,10 +96,17 @@ body{
     display: inline-block;
     padding-right: 40px;
 }
+#recipeDescription.fullWidthDescription{
+	width: 100%;
+	margin-bottom: 20px;
+}
 #recipeImage{
     width: 50%;
     display: inline-block;
     float: left;
+}
+#recipeImage.fullWidthDescription{
+	display: none;
 }
 #recipeImage img{
 	width: 100%;

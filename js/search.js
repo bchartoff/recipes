@@ -46,7 +46,6 @@ $(document).ready(function(){
     recipeCount += 1
     $(".column_" + String(colNum)).append(html_ele);
     // $(".column_1").append(html_ele);
-    html_ele.addClass("trash")
   }
 
   var FJS = FilterJS(recipes, ".results_column", {
