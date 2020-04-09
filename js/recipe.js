@@ -25,7 +25,7 @@ function parseISO8601Duration(iso8601Duration) {
 };
 
 
-d3.json("data/schema/" + getQueryString("recipe")).then(function(data){
+d3.json("data/schema/" + getQueryString("source") + "/" + getQueryString("recipe")).then(function(data){
 	var tags = data.recipeCategory.split(", ")
 		.concat(
 			data.keywords.split(", ")
@@ -123,8 +123,7 @@ d3.json("data/schema/" + getQueryString("recipe")).then(function(data){
 		.attr("class","ingredient")
 		.html(function(d){
 			// for inline recipe links like recipe=6255-peruvian-black-sea-bass-tiradito.json
-			return d.replace(/http.?:\/\/cooking\.nytimes\.com\/recipes\/(.*)\"\>"/,"recipe.html?recipe=\1.json\"\>")
-			// return d
+			return d.replace(/http.?:\/\/cooking\.nytimes\.com\/recipes\/(.*)\/(.*)\"\>"/,"recipe.html?recipe=\2&source=\1.json\"\>")
 		})
 
 	var step = d3.select("#steps")
@@ -140,7 +139,7 @@ d3.json("data/schema/" + getQueryString("recipe")).then(function(data){
 	step.append("div")
 		.attr("class","stepText")
 		.html(function(d){
-			return d.replace(/http.?:\/\/cooking\.nytimes\.com\/recipes\/(.*)\"\>"/,"recipe.html?recipe=\1.json\"\>")
+			return d.replace(/http.?:\/\/cooking\.nytimes\.com\/recipes\/(.*)\/(.*)\"\>"/,"recipe.html?recipe=\2&source=\1.json\"\>")
 		})
 
 

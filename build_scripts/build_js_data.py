@@ -1,7 +1,7 @@
 import os,json, isodate, time, sys
 from stat import S_ISREG, ST_CTIME, ST_MODE
 
-path_to_json = 'data/schema/'
+path_to_json = 'data/schema/nyt/'
 
 out = []
 
@@ -56,7 +56,7 @@ for file_name in files:
 
 		duration = "" if "totalTime" not in data else isoDurationToString(data["totalTime"])
 		# print(rating)
-		recipe = {"json": file_name.replace(path_to_json,""),"name":data["name"], "description": data["description"], "author": data["author"]["name"], "image": data["image"], "duration": duration, "servings": data["recipeYield"], "cuisine": data["recipeCuisine"], "categories": data["recipeCategory"].split(", "), "keywords": data["keywords"], "rating": rating }
+		recipe = {"source": "nyt", "json": file_name.replace(path_to_json,""),"name":data["name"], "description": data["description"], "author": data["author"]["name"], "image": data["image"], "duration": duration, "servings": data["recipeYield"], "cuisine": data["recipeCuisine"], "categories": data["recipeCategory"].split(", "), "keywords": data["keywords"], "rating": rating }
 		# print(file_name)
 		out.append(recipe)
 
