@@ -10,10 +10,27 @@ a{
     margin: 0 auto;
 }
 #recipeTitle{
-	font-size: 30px;
+    font-size: 30px;
     font-weight: 900;
     margin-bottom: 10px;
-    font-family: "Roboto Slab"
+    font-family: "Roboto Slab";
+    width: calc(100% - 45px);
+}
+#recipeTitle a{
+    text-decoration: none;
+    color: #353535;
+}
+#recipeTitle a:hover{
+    text-decoration: underline;
+}
+body.se #recipeTitle a:hover{
+    color: #30a2cc;
+}
+body.sk #recipeTitle a:hover{
+    color: #6f7997;
+}
+body.nyt #recipeTitle a:hover{
+    color: #e33d26;
 }
 #recipeAuthor{
 	font-size: 15px;
@@ -27,10 +44,33 @@ a{
     text-decoration: underline;
     font-weight: bold;
 }
+#recipeLogo{
+    position: absolute;
+}
+#recipeLogo.sk{
+    top: 0px;
+    right: 0px;
+    width: 50px;
+}
+#recipeLogo.se{
+    top: 0px;
+    right: 0px;
+    width: 40px;
+}
+#recipeLogo.nyt{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    width: 22px;
+}
+#recipeLogo img{
+    width: 100%;
+}
 
 #headerContainer{
 	padding-bottom: 0px;
-    border-bottom: 1px solid #353535
+    border-bottom: 1px solid #353535;
+    position: relative;
 }
 #summaryContainer{
     width: 100%;

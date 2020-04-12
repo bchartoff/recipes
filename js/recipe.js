@@ -11,6 +11,9 @@ function parseISO8601Duration(iso8601Duration) {
 		return {"hours": "", "minutes": ""}
 	}
     var matches = iso8601Duration.match(iso8601DurationRegex);
+    if(matches == null){
+    	return null
+    }
 
     return {
         sign: matches[1] === undefined ? '+' : '-',
@@ -26,11 +29,23 @@ function parseISO8601Duration(iso8601Duration) {
 
 
 d3.json("data/schema/" + getQueryString("source") + "/" + getQueryString("recipe")).then(function(data){
-	var tags = data.recipeCategory.split(", ")
-		.concat(
-			data.keywords.split(", ")
-		)
-		.sort(function(a,b){
+	// console.log(data)
+	var source = getQueryString("source"),
+		tags;
+	if(source == "se"){
+		tags = data.recipeCategory.concat(data.keywords).concat(data.receipeCuisine)
+	}else{
+		tags = data.recipeCategory.split(", ")
+			.concat(
+				data.keywords.split(", ")
+			)
+			.concat(
+				// console.log(data)
+				data.recipeCuisine.split(", ")
+			)
+	}
+
+	tags.sort(function(a,b){
 			var tagA = a.toUpperCase(); // ignore upper and lowercase
 			var tagB = b.toUpperCase(); // ignore upper and lowercase
 			if (tagA < tagB) {
@@ -45,40 +60,58 @@ d3.json("data/schema/" + getQueryString("source") + "/" + getQueryString("recipe
 
 		})
 
-	var timeObj = parseISO8601Duration(data.totalTime),
-		hours = timeObj.hours,
-		minutes = timeObj.minutes,
-		timeString = "<span class=\"smallLabel\">Time</span>",
-		suffix;
-	// if(timeObj.hours == 0)
-	// console.log(timeObj.minutes, timeObj.hours)
-	if(hours == "" && minutes == ""){
-		timeString = ""
-	}
-	else if(hours == 0){
-		suffix = (minutes == "1") ? "" : "s"
-		timeString += minutes + " minute" + suffix
-	}
-	else if(minutes == 0){
-		suffix = (hours == "1") ? "" : "s"
-		timeString += hours + " hour" + suffix
+	
+
+	var timeObj = (source == "se") ? data.totalTime : parseISO8601Duration(data.totalTime),
+		timeString = "<span class=\"smallLabel\">Time</span>"
+	if (timeObj == null || source == "se"){
+		timeString += data.totalTime
 	}else{
-		suffixM = (minutes == "1") ? "" : "s"
-		suffixH = (minutes == "1") ? "" : "s"
+		var hours = timeObj.hours,
+			minutes = timeObj.minutes,
+			
+			suffix;
+		// if(timeObj.hours == 0)
+		// console.log(timeObj.minutes, timeObj.hours)
+		if(hours == "" && minutes == ""){
+			timeString = ""
+		}
+		else if(hours == 0){
+			suffix = (minutes == "1") ? "" : "s"
+			timeString += minutes + " minute" + suffix
+		}
+		else if(minutes == 0){
+			suffix = (hours == "1") ? "" : "s"
+			timeString += hours + " hour" + suffix
+		}else{
+			suffixM = (minutes == "1") ? "" : "s"
+			suffixH = (minutes == "1") ? "" : "s"
 
-		timeString += hours +" hour" + suffixH + " and " + minutes + " minute" + suffixM
+			timeString += hours +" hour" + suffixH + " and " + minutes + " minute" + suffixM
+		}
 	}
+	d3.select("body").classed(source,true)
 
-	d3.select("#recipeTitle").html(data.name)
+	d3.select("#recipeTitle")
+		.append("a")
+		.attr("href", data.link)
+		.html(data.name)
+		.on("mouseover", function(){d3.select("#recipeLogo img").attr("src","img/" + source + "-hover.png")})
+		.on("mouseout", function(){ d3.select("#recipeLogo img").attr("src","img/" + source + ".png")})
 	d3.select("#recipeAuthor")
 		.append("a")
 		.attr("href","index.html?search=" + encodeURIComponent(data.author.name))
 		.html(data.author.name)
+	// make this a link 
+	d3.select("#recipeLogo")
+		.classed(source ,true)
+		.append("img")
+		.attr("src","img/" + source + ".png")
 
 	d3.select("#summaryYield").html("<span class=\"smallLabel\">Yield</span>" + data.recipeYield)
 	d3.select("#summaryTime").html(timeString)
 	// console.log(data)
-	if(data.aggregateRating == null){
+	if(data.aggregateRating == null || data.aggregateRating == ""){
 		d3.select("#summaryRating").remove()
 		d3.select("#ratingCount").remove()
 	}else{
@@ -141,7 +174,5 @@ d3.json("data/schema/" + getQueryString("source") + "/" + getQueryString("recipe
 		.html(function(d){
 			return d.replace(/http.?:\/\/cooking\.nytimes\.com\/recipes\/(.*)\/(.*)\"\>"/,"recipe.html?recipe=\2&source=\1.json\"\>")
 		})
-
-
 
 })

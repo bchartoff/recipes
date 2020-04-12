@@ -1,12 +1,12 @@
-import os,json, isodate, time, sys
-from stat import S_ISREG, ST_CTIME, ST_MODE
-
-path_to_json = 'data/schema/nyt/'
+import os,json, isodate, time, sys, glob
 
 out = []
 
 def isoDurationToString(isoDuration):
-	timeDelta = isodate.parse_duration(isoDuration)
+	try:
+		timeDelta = isodate.parse_duration(isoDuration)
+	except:
+		return isoDuration
 	hours, remainder = divmod(timeDelta.total_seconds(), 3600)
 	minutes, seconds = divmod(remainder, 60)
 
@@ -26,39 +26,50 @@ def isoDurationToString(isoDuration):
 		return "%i hour%s and %i minute%s"%(hours, suffixH, minutes, suffixM)
 
 
+def buildJs(source):
+	path_to_json = 'data/schema/%s/'%source
+	files = glob.glob(path_to_json + "*.json")
+	files.sort(key=os.path.getmtime)
 
-# # dir_path = path_to_json
-# # get all entries in the directory
-# entries = (os.path.join(path_to_json, file_name) for file_name in os.listdir(path_to_json))
-# # Get their stats
-# entries = ((os.stat(path), path) for path in entries)
-# # leave only regular files, insert creation date
-# entries = ((stat[ST_CTIME], path)
-#            for stat, path in entries if S_ISREG(stat[ST_MODE]))
-# print(entries)
-import glob
-import os
+	for file_name in files:
 
-files = glob.glob(path_to_json + "*.json")
-files.sort(key=os.path.getmtime)
-# print(files)
+		if(file_name.find(".json") == -1):
+			continue
+
+		with open(file_name) as json_file:
+
+			data = json.load(json_file)
+
+			if(source == "nyt"):
+				link = "https://cooking.nytimes.com/recipes/" + file_name.replace(path_to_json,"").replace(".json","")
+			elif(source == "sk"):
+				link = "https://smittenkitchen.com/" + file_name.replace(path_to_json,"").replace("_","/").replace(".json","")
+			elif(source == "se"):
+				link = data["link"]
+
+			data["link"] = link
+			with open(file_name, 'w') as f:
+				json.dump(data, f)	
 
 
-for file_name in files:
-	if(file_name.find(".json") == -1):
-		continue
+			rating = "" if data["aggregateRating"] == None or data["aggregateRating"] == "" or data["aggregateRating"]["ratingValue"] == "" else float(data["aggregateRating"]["ratingValue"])
 
-	with open(file_name) as json_file:
+			duration = "" if "totalTime" not in data else isoDurationToString(data["totalTime"])
+			# print(rating)
+			if(source == "se"):
+				categories = data["recipeCategory"]
+			else:
+				categories = data["recipeCategory"].split(", ")
+			recipe = {"source": source, "json": file_name.replace(path_to_json,""),"name":data["name"], "description": data["description"], "author": data["author"]["name"], "image": data["image"], "duration": duration, "servings": data["recipeYield"], "cuisine": data["recipeCuisine"], "categories": categories, "keywords": data["keywords"], "rating": rating, "link": link}
+			# print(file_name)
+			out.append(recipe)
 
-		data = json.load(json_file)
 
-		rating = "" if data["aggregateRating"] == None else float(data["aggregateRating"]["ratingValue"])
 
-		duration = "" if "totalTime" not in data else isoDurationToString(data["totalTime"])
-		# print(rating)
-		recipe = {"source": "nyt", "json": file_name.replace(path_to_json,""),"name":data["name"], "description": data["description"], "author": data["author"]["name"], "image": data["image"], "duration": duration, "servings": data["recipeYield"], "cuisine": data["recipeCuisine"], "categories": data["recipeCategory"].split(", "), "keywords": data["keywords"], "rating": rating }
-		# print(file_name)
-		out.append(recipe)
+
+sources = ["nyt","sk","se"]
+for source in sources:
+	buildJs(source)
 
 with open('data/recipes.js', 'w') as f:
 	f.write("recipes=")

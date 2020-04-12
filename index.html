@@ -27,6 +27,33 @@
         </div>
       
     </div>
+    <div class = "col-md-4 sources">
+          <fieldset id="source_fields">
+            <div class="checkbox nyt">
+              <label>
+                <input type="checkbox" value="nyt" id="nyt_source" checked>
+                <span class = "nyt source">
+                  <img src = "img/nyt-hover.png">
+                </span>
+              </label>
+            </div>
+            <div class="checkbox sk">
+              <label>
+                <input type="checkbox" value="sk" id="sk_source" checked>
+                <span class = "sk source">
+                  <img src = "img/sk-hover.png">
+                </span>
+              </label>
+            </div>
+            <div class="checkbox se">
+              <label>
+                <input type="checkbox" value="se" id="se_source" checked>
+                <span class = "se source">
+                  <img src = "img/se-hover.png">
+                </span>
+              </label>
+            </div>
+    </div>
 
 <!--         <div class="content col-md-6">
           <div id="pagination" class="recipes-pagination col-md-9"></div>
@@ -60,7 +87,7 @@
     <script id="recipe-template" type="text/html">
       <a href = "recipe.html?recipe=<%= json %>&source=<%= source %>">
           <div class="col-md-12 recipe">
-            <div class="thumbnail">
+            <div class="thumbnail <%= source %>">
               <div class="card">
               <img class = "previewImg" src = "<%= image %>">
 
@@ -71,13 +98,19 @@
                 <div class = "duration"><%= duration %></div>
                 <div class = "servings"><%= servings %></div>
               </div>
+              <div class = "cardLogo noHover <%= source %>">
+                <img src = "img/<%= source %>.png">
+              </div>
+              <div class = "cardLogo hover <%= source %>">
+                <img src = "img/<%= source %>-hover.png">
+              </div>
           </div>
         </div>
       </a>
     </script>
     <script src="js/vendor/jquery-1.11.3.min.js" type="text/javascript"></script>
     <script src="js/vendor/jquery-ui-1.10.2.custom.min.js" type="text/javascript"></script>
-    <script src="js/vendor/filter.js" type="text/javascript"></script>
+    <script src="js/vendor/filter_custom.js" type="text/javascript"></script>
     <script src="data/recipes.js" type="text/javascript"></script>
     <script src="js/search.js" type="text/javascript"></script>
     </body>

@@ -37,6 +37,30 @@ select:focus, textarea:focus, input:focus{
     margin-bottom: 24px;
     padding-right: 30px;
 }
+.checkbox input{
+  display: none;
+}
+.checkbox{
+  display: inline-block;
+  float: right;
+  position: relative;
+}
+.checkbox.sk{
+  width: 70px;
+  top: 43px;
+}
+.checkbox.nyt{
+  width: 50px;
+  top: 26px;
+  margin-right: 26px;
+}
+.checkbox.se{
+    width: 63px;
+    top: 43px;
+}
+.checkbox img{
+  width: 100%;
+}
 .criteria{
   background-color: #D3D3D3;
   min-height: 110px;
@@ -70,6 +94,22 @@ select:focus, textarea:focus, input:focus{
 .fjs_item:hover .author, .fjs_item:hover .duration, .fjs_item:hover .servings{
   font-weight: bold;
 }
+.fjs_item:hover .thumbnail.nyt .author, .fjs_item:hover .thumbnail.nyt .duration, .fjs_item:hover .thumbnail.nyt .servings, .fjs_item:hover .thumbnail.nyt h4{
+  color: #e33d26;
+}
+.fjs_item:hover .thumbnail.sk .author, .fjs_item:hover .thumbnail.sk .duration, .fjs_item:hover .thumbnail.sk .servings, .fjs_item:hover .thumbnail.sk h4{
+  color: #6f7997;
+}
+.fjs_item:hover .thumbnail.se .author, .fjs_item:hover .thumbnail.se .duration, .fjs_item:hover .thumbnail.se .servings, .fjs_item:hover .thumbnail.se h4{
+  color: #30a2cc;
+}
+
+.fjs_item:hover .cardLogo.hover{
+  display: block;
+}
+.fjs_item:hover .cardLogo.noHover{
+  display: none;
+}
 .card h4{
   color: #353535;
   font-weight: 900;
@@ -84,6 +124,31 @@ select:focus, textarea:focus, input:focus{
 }
 .duration, .servings{
   font-size: 12px;
+}
+.cardLogo.hover{
+  display: none;%
+}
+.cardLogo{
+  display: block;
+  position: absolute;
+}
+.cardLogo.nyt{
+  bottom: 41px;
+  right: 23px;
+  width: 20px;
+}
+.cardLogo.sk{
+  bottom: 41px;
+  right: 24px;
+  width: 41px;
+}
+.cardLogo.se{
+  bottom: 41px;
+  right: 24px;
+  width: 41px;
+}
+.cardLogo img{
+  width: 100%;
 }
 
 .field-row{

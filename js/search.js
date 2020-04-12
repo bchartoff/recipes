@@ -80,6 +80,9 @@ $(document).ready(function(){
     FJS.filter()
   }
 
+  FJS.addCriteria({field: 'source', ele: '#source_fields input:checkbox'});
+
+
   // FJS.page = { currentPage: 12, perPage: 20 };
   // FJS.renderPagination(40)
 
@@ -100,8 +103,21 @@ $(document).ready(function(){
 //   });
 
 
-//   // $('#genre_criteria :checkbox').prop('checked', true);
-//   // $('#all_genre').on('click', function(){
-//   //   $('#genre_criteria :checkbox').prop('checked', $(this).is(':checked'));
-//   // });
-// }
+  $('#source_fields :checkbox').prop('checked', true);
+  numChecked = $("#source_fields").find('input:checked').length
+  $('#source_fields :checkbox').on("click", function(){
+    // console.log("foo", $("#source_fields").find('input:checked').length)
+    // if($("#source_fields").find('input:checked').length == 1 && !$(this).is(':checked')) return false
+
+    source = this.value
+    if($(this).is(':checked')){
+      $("span." + source + ".source img").attr("src","img/" + source + "-hover.png")
+    }else{
+      $("span." + source + ".source img").attr("src","img/" + source + "-inactive.png")
+    }
+
+    numChecked = $("#source_fields").find('input:checked').length
+    if(numChecked == 0){
+      FJS.filter(false)
+    }
+  })
