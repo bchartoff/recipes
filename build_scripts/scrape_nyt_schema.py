@@ -26,7 +26,7 @@ def get_ld_json(recipePath):
 
 def getrecipePathsFromPage(num):
 	print("getting NYT recipe recipePaths for search result page %i"%num)
-	url = "https://cooking.nytimes.com/search?q=&page=%i"%num
+	url = "https://cooking.nytimes.com/search?page=%i"%num
 	parser = "html.parser"
 	req = requests.get(url)
 	soup = BeautifulSoup(req.text, parser)
@@ -36,7 +36,7 @@ def getrecipePathsFromPage(num):
 		recipePaths.append(card["data-url"])
 
 if("--full" in sys.argv):
-	for num in range(1,423):
+	for num in range(1,209):
 		getrecipePathsFromPage(num)
 	with open('data/build_script_output/nyt/allRecipes.json', 'w') as f:
 		json.dump(recipePaths, f)
